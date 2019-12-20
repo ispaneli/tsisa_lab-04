@@ -104,10 +104,10 @@ void get_answer(size_t index) {
 }
 
 void create_matrix(std::vector<std::vector<double>>& Matrix) {
-    Matrix = {{7, 7, 2, 2},
-              {5, 4, 3, 6},
-              {2, 3, 5, 3},
-              {4, 2, 6, 7}};
+    Matrix = {{2, 7, 2, 2},
+              {4, 4, 3, 6},
+              {7, 3, 5, 3},
+              {5, 2, 6, 7}};
 
     std::cout << "Составленная матрица оценок:" << std::endl;
 
@@ -174,7 +174,7 @@ void replacing_criteria(std::vector<std::vector<double>> Matrix) {
 
     std::cout << "Приемлемый вариант: ";
 
-    get_answer(std::distance(result.begin(), std::min_element(result.begin(), result.end())));
+    get_answer(std::distance(result.begin(), std::max_element(result.begin(), result.end())));
 
     std::cout << std::endl << std::endl;
 }
@@ -233,11 +233,11 @@ void weighing(std::vector<std::vector<double>> Matrix) {
 
     print(Matrix);
 
-    std::vector<double> experts_12_13_14_23_24_34 = {1, 0.5, 1, 0, 0.5, 1};
+    std::vector<double> experts_12_13_14_23_24_34 = {0, 0, 0, 0, 0.5, 1};
     std::cout << "Вектор экспертных оценок критериев: ";
     print(experts_12_13_14_23_24_34);
 
-    std::vector<double> WeightCriteria = {1 + 0.5 + 1, 0 + 0 + 0.5, 0.5 + 1 + 1, 0 + 0.5 + 0};
+    std::vector<double> WeightCriteria = {0 + 0 + 0, 1 + 0 + 0.5, 1 + 1 + 1, 1 + 0.5 + 0};
     std::cout << "Вектор весов критериев: ";
     print(WeightCriteria);
     normalization(WeightCriteria);
