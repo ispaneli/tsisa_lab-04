@@ -11,7 +11,7 @@
 #include <cmath>
 
 void cout_task_info(const std::vector<double>& vec) {
-    std::cout << "1) Дешевизна: . . . . . . . ";
+    std::cout << "1) Цена за 1 м^3: . . . . . ";
     std::cout << vec[0] << std::endl;
 
     std::cout << "2) Легкость обработки:. . . ";
@@ -104,10 +104,10 @@ void get_answer(size_t index) {
 }
 
 void create_matrix(std::vector<std::vector<double>>& Matrix) {
-    Matrix = {{2, 7, 2, 2},
-              {4, 4, 3, 6},
-              {7, 3, 5, 3},
-              {5, 2, 6, 7}};
+    Matrix = {{7, 7, 2, 2},
+              {5, 4, 3, 6},
+              {2, 3, 5, 3},
+              {4, 2, 6, 7}};
 
     std::cout << "Составленная матрица оценок:" << std::endl;
 
@@ -117,7 +117,7 @@ void create_matrix(std::vector<std::vector<double>>& Matrix) {
 
 /// Метод 1: "Метод замены критериев ограничениями".
 void replacing_criteria(std::vector<std::vector<double>> Matrix) {
-    std::cout << "Главный критерий - дешевизна." << std::endl << std::endl;
+    std::cout << "Главный критерий - дешевизна (т.е. обратное цене)." << std::endl << std::endl;
     std::cout << "Минимально допустимые уровни для остальных критериев:" << std::endl;
     std::cout << "а) Легкость обработки >= 0.4×A_max2, т.е. >= 2.8" << std::endl;
     std::cout << "б) Долговечность      >= 0.2×A_max3, т.е. >= 1.2" << std::endl;
@@ -174,22 +174,22 @@ void replacing_criteria(std::vector<std::vector<double>> Matrix) {
 
     std::cout << "Приемлемый вариант: ";
 
-    get_answer(std::distance(result.begin(), std::max_element(result.begin(), result.end())));
+    get_answer(std::distance(result.begin(), std::min_element(result.begin(), result.end())));
 
     std::cout << std::endl << std::endl;
 }
 
 /// Метод 2: "Формирование и сужение множества Парето".
 void Pareto_set(std::vector<std::vector<double>> Matrix) {
-    std::cout << "Главные критерии: Долговечность и Дешевизна" << std::endl << std::endl;
+    std::cout << "Главные критерии: Дешевизна и Долговечность." << std::endl << std::endl;
     std::vector<std::pair<double, double>> main;
 
     for (auto& i : Matrix) {
-        main.emplace_back(10 - i[0], i[2]);
+        main.emplace_back(i[0], i[2]);
     }
 
     std::pair<double, double> utopia;
-    utopia.first = 10;
+    utopia.first = 0;
     utopia.second = 10;
 
     std::cout << "Точка утопии: (" << utopia.first << ";" << utopia.second << ")." << std::endl;
@@ -197,13 +197,16 @@ void Pareto_set(std::vector<std::vector<double>> Matrix) {
     std::vector<double> radii;
 
     for (auto& i : main) {
-        i.first = utopia.first - i.first;
-        i.second = utopia.second - i.second;
+        i.first =  std::abs(utopia.first - i.first);
+        i.second = std::abs(utopia.second - i.second);
     }
 
     for (auto& i : main) {
         radii.push_back(i.first + i.second);
     }
+
+    std::cout << "Вектор Манхэттенских расстояний: ";
+    print(radii);
 
     std::cout << std::endl << "Приемлемый вариант: ";
 
@@ -231,7 +234,7 @@ void weighing(std::vector<std::vector<double>> Matrix) {
     print(Matrix);
 
     std::vector<double> experts_12_13_14_23_24_34 = {1, 0.5, 1, 0, 0.5, 1};
-    std::cout << "Вектор экспертнуых оценок критериев: ";
+    std::cout << "Вектор экспертных оценок критериев: ";
     print(experts_12_13_14_23_24_34);
 
     std::vector<double> WeightCriteria = {1 + 0.5 + 1, 0 + 0 + 0.5, 0.5 + 1 + 1, 0 + 0.5 + 0};
